@@ -1,30 +1,14 @@
 const axios = require('axios');
 const { authenticate } = require('../auth/authenticate');
-const db = require('../database/dbConfig.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const RoutesModel = require('./routesModel');
 
 module.exports = server => {
 	server.post('/api/register', register);
 	server.post('/api/login', login);
 	server.get('/api/jokes', authenticate, getJokes);
 };
-
-async function add(user) {
-	const [id] = await db('users').insert(user);
-	return findById(id);
-}
-
-function findBy(filter) {
-	return db('users').where(filter);
-}
-
-function findById(id) {
-	return db('users')
-		.where({ id })
-		.first();
-}
 
 function generateToken(user) {
 	const payload = {
@@ -44,7 +28,7 @@ function register(req, res) {
 	const hash = bcrypt.hashSync(user.password, 10);
 	user.password = hash;
 
-	add(user)
+	RoutesModel.add(user)
 		.then(saved => {
 			res.status(201).json(saved);
 		})
@@ -56,7 +40,7 @@ function register(req, res) {
 function login(req, res) {
 	let { username, password } = req.body;
 
-	findBy({ username })
+	RoutesModel.findBy({ username })
 		.first()
 		.then(user => {
 			if (user && bcrypt.compareSync(password, user.password)) {
