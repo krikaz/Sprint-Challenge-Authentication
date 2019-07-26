@@ -1,11 +1,12 @@
 const db = require('../database/dbConfig');
 const RoutesModel = require('./routesModel');
+const Routes = require('./routes');
 
 beforeEach(async () => {
 	await db('users').truncate();
 });
 
-describe('users.insert', () => {
+describe('users.add', () => {
 	it('is able to add a new user to the db', async () => {
 		let users = await RoutesModel.findAll();
 		expect(users).toHaveLength(0);
@@ -17,7 +18,7 @@ describe('users.insert', () => {
 		expect(routes).toHaveLength(3);
 	});
 
-	it('is able to insert the correct user', async () => {
+	it('is able to add the correct user', async () => {
 		let users = await RoutesModel.findAll();
 		expect(users).toHaveLength(0);
 
