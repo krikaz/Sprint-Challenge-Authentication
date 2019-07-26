@@ -1,38 +1,34 @@
-const db = require('../data/dbConfig');
+const db = require('../database/dbConfig');
+const RoutesModel = require('./routesModel');
 
 beforeEach(async () => {
 	await db('users').truncate();
 });
 
 describe('users.insert', () => {
-	it('is able to add user to the db!', async () => {
-		let users = await Users.getAll();
+	it('is able to add a new user to the db', async () => {
+		let users = await RoutesModel.findAll();
 		expect(users).toHaveLength(0);
 
-		await Users.insert({ name: 'whiskeyjack' });
-		await Users.insert({ name: 'crokus' });
-		await Users.insert({ name: 'swedgen' });
-		users = await Users.getAll();
-
-		expect(users).toHaveLength(3);
+		await RoutesModel.add({ username: 'whiskeyjack', password: '1234' });
+		await RoutesModel.add({ username: 'crokus', password: '1234' });
+		await RoutesModel.add({ username: 'swedgen', password: '1234' });
+		routes = await RoutesModel.findAll();
+		expect(routes).toHaveLength(3);
 	});
 
-	it('is able to insert the correct users', async () => {
-		let users = await Users.getAll();
+	it('is able to insert the correct user', async () => {
+		let users = await RoutesModel.findAll();
 		expect(users).toHaveLength(0);
 
-		await Users.insert({ name: 'whiskeyjack' });
-		await Users.insert({ name: 'crokus' });
-		await Users.insert({ name: 'swedgen' });
-		users = await Users.getAll();
+		await RoutesModel.add({ username: 'whiskeyjack', password: '1234' });
+		await RoutesModel.add({ username: 'crokus', password: '1234' });
+		await RoutesModel.add({ username: 'swedgen', password: '1234' });
+		routes = await RoutesModel.findAll();
 
-		expect(users[0].name).toBe('whiskeyjack');
-		expect(users[1].name).toBe('crokus');
-		expect(users[2].name).toBe('swedgen');
-	});
-
-	it('returns the newly inserted user', async () => {
-		const users = await Users.insert({ name: 'whiskeyjack' });
-		expect(users.name).toBe('whiskeyjack');
+		expect(routes[0].username).toBe('whiskeyjack');
+		expect(routes[1].username).toBe('crokus');
+		expect(routes[2].username).toBe('swedgen');
 	});
 });
+
